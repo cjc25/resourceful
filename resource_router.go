@@ -1,3 +1,46 @@
+// Package resourceful provides an implementation of resourceful routing. It
+// simplifies setting up RESTful endpoints and providing handlers.
+//
+// Background
+//
+// Resourceful routes are a way to represent CRUD-manageable resources in a web
+// application. They provide a conventional set of endpoints to manage
+// application models. They are a standard interface for the Ruby on Rails
+// framework.
+//
+// Endpoints
+//
+// The package implements a simple API, ignoring the HTML form endpoints from
+// Rails-style resourceful routes.
+//
+//   HTTP Method  URI             Description
+//   GET          /resource       Index: list all instances.
+//   POST         /resource       Create: make a new instance.
+//   GET          /resource/{id}  Show: get a specific instance.
+//   PUT          /resource/{id}  Update: change a specific instance.
+//   DELETE       /resource/{id}  Destroy: delete a specific instance.
+//
+// Handlers
+//
+// The package provides a ResourceHandlers implementation in a struct
+// HandlerFuncs which responds with a 404 on all endpoints. The endpoints can
+// be overridden individually.
+//
+// If the application implements ResourceHandlers, only a single-process
+// architecture can hold complex state in memory between calls.  Since scalable
+// web applications will have to shard work across multiple processes and
+// implement cheap recovery when a process goes down, this is discouraged.
+// Instead, maintain only basic state like a database connection and load
+// per-request data separately on each request from a memcache or persistent
+// store.
+//
+// Routers
+//
+// A router is created by NewResourceRouter, and uses gorilla/mux to do URI and
+// HTTP method matching. NewResourceRouter takes a resource name and
+// ResourceHandlers to build the routes. For endpoints that use a specific
+// instance, the resource ids for a request can be extracted within a handler
+// with ResourceId(resource_name, request).
 package resourceful
 
 import (
