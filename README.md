@@ -7,7 +7,7 @@ simplifies setting up RESTful endpoints and providing handlers.
 
 For full documentation see the godoc.
 
-# Example
+## Example
 
 ```Go
 func NoId(w http.ResponseWriter, r *http.Request) {
@@ -31,13 +31,13 @@ func main() {
 }
 ```
 
-# Background
+## Background
 
 Resourceful routes are a way to represent CRUD-manageable resources in a web
 application. They provide a conventional set of endpoints to manage application
 models. They are a standard interface for the Ruby on Rails framework.
 
-# Endpoints
+## Endpoints
 
 The package implements a simple API, ignoring the HTML form endpoints from
 Rails-style resourceful routes.
