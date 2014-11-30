@@ -88,6 +88,5 @@ func (router *ResourceRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 	// TODO(cjc25): Keep track of the router in a context (the gorilla context?),
 	// it will let us know which resources are supposed to be addressed by this
 	// router.
-
 	router.internalRouter.ServeHTTP(w, r)
 }
