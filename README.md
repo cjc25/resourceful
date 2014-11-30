@@ -19,12 +19,12 @@ func WithId(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+  r := resourceful.NewResourceRouter()
   h := resourceful.HandlerFuncs{
     IndexFunc: NoId,
     CreateFunc: NoId,
     ShowFunc: WithId,
   }
-  r := resourceful.NewResourceRouter
   r.AddResource(“resource_name”, h)
   http.Handle(“/”, r)
 
