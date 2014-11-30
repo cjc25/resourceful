@@ -37,10 +37,10 @@
 // Routers
 //
 // A router is created by NewResourceRouter, and uses gorilla/mux to do URI and
-// HTTP method matching. NewResourceRouter takes a resource name and
-// ResourceHandlers to build the routes. For endpoints that use a specific
-// instance, the resource ids for a request can be extracted within a handler
-// with ResourceId(resource_name, request).
+// HTTP method matching. Resources are added with AddResource, which takes a
+// resource name and ResourceHandlers to build the routes. For endpoints that
+// use a specific instance, the resource ids for a request can be extracted
+// within a handler with ResourceId(resource_name, request).
 package resourceful
 
 import (

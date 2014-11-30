@@ -24,7 +24,8 @@ func main() {
     CreateFunc: NoId,
     ShowFunc: WithId,
   }
-  r := resourceful.NewResourceRouter(“resource_name”, h)
+  r := resourceful.NewResourceRouter
+  r.AddResource(“resource_name”, h)
   http.Handle(“/”, r)
 
   log.Fatal(http.ListenAndServe(":8080", nil))
