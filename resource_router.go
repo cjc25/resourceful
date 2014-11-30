@@ -67,21 +67,26 @@ type ResourceRouter struct {
 	internalRouter *mux.Router
 }
 
-// Create a new ResourceRouter. The router directs RESTful resource actions to
-// the handlers defined by the provided interface.
-func NewResourceRouter(resourceName string, handlers ResourceHandlers) *ResourceRouter {
+// Create a new ResourceRouter.
+func NewResourceRouter() *ResourceRouter {
+	return &ResourceRouter{mux.NewRouter()}
+}
+
+// Add a resource to a router. The router directs RESTful resource actions to
+// the handlers defined by the provided interface. This returns the modified
+// router to allow chained calls.
+func (router *ResourceRouter) AddResource(resourceName string, handlers ResourceHandlers) *ResourceRouter {
 	resourcePath := fmt.Sprintf("/%v", resourceName)
 	// Disallow empty ids.
 	instancePath := fmt.Sprintf("/%v/{%v:.+}", resourceName, resourceIdName(resourceName))
 
-	gr := mux.NewRouter()
-	gr.HandleFunc(resourcePath, handlers.Index).Methods("GET")
-	gr.HandleFunc(resourcePath, handlers.Create).Methods("POST")
-	gr.HandleFunc(instancePath, handlers.Show).Methods("GET")
-	gr.HandleFunc(instancePath, handlers.Update).Methods("PUT")
-	gr.HandleFunc(instancePath, handlers.Destroy).Methods("DELETE")
+	router.internalRouter.HandleFunc(resourcePath, handlers.Index).Methods("GET")
+	router.internalRouter.HandleFunc(resourcePath, handlers.Create).Methods("POST")
+	router.internalRouter.HandleFunc(instancePath, handlers.Show).Methods("GET")
+	router.internalRouter.HandleFunc(instancePath, handlers.Update).Methods("PUT")
+	router.internalRouter.HandleFunc(instancePath, handlers.Destroy).Methods("DELETE")
 
-	return &ResourceRouter{gr}
+	return router
 }
 
 func (router *ResourceRouter) ServeHTTP(w http.ResponseWriter, r *http.Request) {

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-var router *ResourceRouter = NewResourceRouter("prefix", HandlerFuncs{
+var router *ResourceRouter = NewResourceRouter().AddResource("prefix", HandlerFuncs{
 	IndexFunc: func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Index function")
 	},
@@ -78,6 +78,18 @@ func TestResourceId_Present(t *testing.T) {
 }
 
 func ExampleResourceRouter() {
+	router := NewResourceRouter()
+	router.AddResource("prefix", HandlerFuncs{
+		ShowFunc: func(w http.ResponseWriter, r *http.Request) {
+			fmt.Fprintf(w, "Show function for %v", ResourceId("prefix", r))
+		},
+	})
+	router.AddResource("resource_2", HandlerFuncs{
+		IndexFunc: func(w http.ResponseWriter, r *http.Request) {
+			fmt.Fprint(w, "Index for resource_2")
+		},
+	})
+
 	w := httptest.NewRecorder()
 	// Show
 	r, err := http.NewRequest("GET", "/prefix/42a", nil)
@@ -88,6 +100,17 @@ func ExampleResourceRouter() {
 	router.ServeHTTP(w, r)
 	fmt.Println(w.Body.String())
 
+	w = httptest.NewRecorder()
+	// Index
+	r, err = http.NewRequest("GET", "/resource_2", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	router.ServeHTTP(w, r)
+	fmt.Println(w.Body.String())
+
 	// Output:
 	// Show function for 42a
+	// Index for resource_2
 }
